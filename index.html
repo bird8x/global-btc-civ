@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-store"><title>Global Bitcoin & Sovereign Compute Civilization Map</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#06101a;color:#d8d2c0;font:13px/1.4 Georgia,"Times New Roman",serif;overflow:hidden}
+canvas{display:block;cursor:grab}canvas:active{cursor:grabbing}
+#top{position:fixed;top:0;left:0;right:0;height:46px;display:flex;align-items:center;gap:16px;padding:0 14px;background:linear-gradient(#1a1e28,#0c0f15);border-bottom:1px solid #6b5a2e;box-shadow:0 2px 12px #000a;z-index:5}
+#top h1{font-size:14px;margin:0;color:#e9c46a;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.y{display:flex;gap:14px;font-family:Consolas,monospace;font-size:12px;flex:1;white-space:nowrap;overflow:hidden}.y b{font-weight:normal}.dim{color:#8f8670}
+#search{background:#0a0d13;border:1px solid #6b5a2e;color:#efe3c2;padding:6px 10px;width:220px;font:13px Georgia;outline:none}#search:focus{border-color:#f4d58d;box-shadow:0 0 8px #e9c46a55}
+#sresults{position:fixed;top:44px;width:260px;background:#0f131b;border:1px solid #6b5a2e;z-index:9;display:none}
+.sr{padding:6px 10px;cursor:pointer;display:flex;justify-content:space-between;gap:8px}.sr span{color:#8f8670;font-size:11px}.sr.on,.sr:hover{background:#2b2312}
+.btn{background:#2b2312;border:1px solid #e9c46a;color:#f4d58d;padding:6px 12px;cursor:pointer;font:13px Georgia}
+#lenses{position:fixed;left:14px;top:60px;display:flex;flex-direction:column;gap:4px;z-index:5}
+#lenses button{background:rgba(16,20,28,.92);color:#bfb59a;border:1px solid #3a3220;padding:6px 12px;text-align:left;font:12px Georgia;cursor:pointer;min-width:170px}
+#lenses kbd{display:inline-block;width:16px;color:#6b5a2e;font-family:Consolas}
+#lenses button.on{background:#2b2312;color:#f4d58d;border-color:#e9c46a}
+#panel{position:fixed;right:14px;top:60px;width:340px;max-height:calc(100% - 74px);overflow:auto;background:rgba(12,15,21,.97);border:1px solid #6b5a2e;box-shadow:0 0 30px #000;padding:16px;z-index:5;display:none}
+.crest{float:left;width:42px;height:42px;margin-right:10px;border:2px solid #c9a24a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:#f4d58d;background:#1b2230}
+#panel h2{margin:0;color:#f4d58d;font-size:18px}#panel .sub{color:#8f8670;font-style:italic;margin-bottom:12px}
+.stat{display:flex;justify-content:space-between;border-bottom:1px dotted #2c2a22;padding:3px 0;font-family:Consolas,monospace;font-size:12px;clear:both}
+.vt{font-size:9px;border:1px solid #555;color:#999;padding:0 3px;margin-left:4px}.vt.ok{border-color:#5cc46b;color:#5cc46b}
+.bar{height:5px;background:#222;margin:2px 0 6px}.bar i{display:block;height:100%}
+#panel h3{font-size:12px;color:#e9c46a;text-transform:uppercase;letter-spacing:1px;margin:12px 0 4px}
+.adv{background:#18140b;border-left:3px solid #e9c46a;padding:8px;font-style:italic;color:#cfc2a0}.src{color:#6d6656;font-size:11px;margin-top:8px}
+#x{float:right;cursor:pointer;color:#888}
+#legend{position:fixed;left:14px;bottom:14px;background:rgba(12,15,21,.92);border:1px solid #3a3220;padding:8px 10px;font-size:11px;z-index:5;max-width:300px}
+.ramp{height:8px}.rl{display:flex;justify-content:space-between;color:#8f8670;margin:2px 0 4px}
+#tip{position:fixed;pointer-events:none;background:#000d;border:1px solid #6b5a2e;padding:4px 8px;font-size:12px;display:none;z-index:6}
+#help{position:fixed;right:14px;bottom:14px;font-size:11px;color:#6d6656;z-index:5}
+#almanac{position:fixed;inset:0;background:#000b;z-index:20;display:none;align-items:center;justify-content:center}
+#almanac .box{width:min(900px,94vw);max-height:86vh;overflow:auto;background:#0f131b;border:1px solid #c9a24a;padding:20px 24px;box-shadow:0 0 40px #000}
+#almanac h2{color:#f4d58d;margin:0 0 4px;letter-spacing:2px}#almanac h3{color:#e9c46a;margin:16px 0 6px;font-size:13px;text-transform:uppercase}
+#almanac table{width:100%;border-collapse:collapse;font-size:12px}#almanac td,#almanac th{border-bottom:1px solid #2c2a22;padding:4px 6px;text-align:left}#almanac th{color:#c9a24a}
+#almanac a{color:#8fc7f0}#almanac tr.pick{cursor:pointer}#almanac tr.pick:hover{background:#2b2312}#alx{float:right;cursor:pointer}
+#almanac sup{color:#888}
+</style></head><body>
+<div id="top"><h1>⛏ Global BTC &amp; Sovereign Compute</h1><div class="y" id="yields"></div>
+<input id="search" placeholder="Search nodes..." autocomplete="off"><button class="btn" id="almbtn">📜 Almanac</button></div>
+<div id="sresults"></div>
+<div id="lenses"></div>
+<canvas id="c"></canvas>
+<div id="panel"></div><div id="legend"></div><div id="tip"></div>
+<div id="help">Drag to pan · Wheel to zoom · Click a node · 1–6 lenses · / search</div>
+<div id="almanac"><div class="box"><span id="alx">✕</span><h2>ALMANAC</h2><div class="dim">Data provenance and the full civilization ledger. Values tagged <sup>ref</sup> are reference values not covered by the cited hashrate release.</div>
+<h3>Sources</h3><table id="altable"></table><h3>Civilizations (click to visit)</h3><table id="alnodes"></table>
+<h3>Yield formulas</h3><div class="dim">⚒ Production = 40×(0.25−$/kWh)/0.24 + 1.6×hash% · ◉ Gold = 0.6×BTC/day + 0.4×hash% + 0.05×reg · ⚗ Science = 0.8×AI index + 6×major AI sites · ★ Wonders = mega-mines, hydro &amp; nuclear plants</div>
+<h3>License</h3><div class="dim">MIT. Architecture inspired by Andrej Karpathy's usaciv (MIT). Coastlines © Natural Earth (public domain).</div></div></div>
+<script>document.getElementById('sresults').style.left=0;window.addEventListener('load',()=>{const r=document.getElementById('search').getBoundingClientRect();const s=document.getElementById('sresults');s.style.left=r.left+'px'})</script>
+<script src="data.js?v=36"></script><script src="world.js?v=36"></script><script src="app.js?v=36"></script>
+</body></html>
